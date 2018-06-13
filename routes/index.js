@@ -14,6 +14,7 @@ router.get('/', function(req, res, next) {
   let echostr = req.query.echostr;
   let nonce = req.query.nonce;
   if (signature && timestamp && echostr) {
+    console.log('adfasdf')
     if (wechatSignVerify(signature, timestamp, nonce)) {
       res.send(echostr);
       return;
