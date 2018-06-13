@@ -35,7 +35,7 @@ const wechatSignVerify = (signature, timestamp, nonce) => {
   let original = oriArray.join('');
   let shaObj = new jsSHA(original, 'TEXT');
   let scyptoString = shaObj.getHash('SHA-1', 'HEX');
-  console.debug(scyptoString + "  :   " + signature);
+  console.log(scyptoString + "  :   " + signature);
   return signature.length && scyptoString === signature;
 }
 
