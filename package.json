@@ -6,7 +6,7 @@
         "start": "babel-node ./bin/main.js",
         "debug": "nodemon ./bin/main.js --exec babel-node",
         "build": "babel bin -d dist",
-        "serve": "node ./dist/main.js"
+        "server": "node ./dist/main.js"
     },
     "dependencies": {
         "co-wechat-api": "^3.7.0",

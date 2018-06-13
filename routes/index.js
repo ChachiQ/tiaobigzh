@@ -8,12 +8,12 @@ var jsSHA = require('jssha');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.debug(req);
+  console.log(req.query);
   let signature = req.query.signature;
   let timestamp = req.query.timestamp;
   let echostr = req.query.echostr;
   let nonce = req.query.nonce;
-  if (signature.length && timestamp.length && echostr.length) {
+  if (signature && timestamp && echostr) {
     if (wechatSignVerify(signature, timestamp, nonce)) {
       res.send(echostr);
       return;
