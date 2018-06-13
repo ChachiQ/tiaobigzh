@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "babel-node ./bin/main.js",
-        "debug": "nodemon ./bin/main.js --exec babel-node",
+        "debug": "nodemon ./bin/main.js --nolazy --inspect-brk=9229 --exec babel-node",
         "build": "babel bin -d dist",
         "server": "node ./dist/main.js"
     },

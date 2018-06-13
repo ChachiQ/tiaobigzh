@@ -10,9 +10,10 @@
             "name": "Launch via NPM",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
-                "run",
+                "run-script",
                 "debug"
-            ]
+            ],
+            "port": 9229
         },
         {
             "type": "node",

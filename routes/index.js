@@ -8,13 +8,12 @@ var jsSHA = require('jssha');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log(req.query);
+  console.debug(req.query);
   let signature = req.query.signature;
   let timestamp = req.query.timestamp;
   let echostr = req.query.echostr;
   let nonce = req.query.nonce;
   if (signature && timestamp && echostr) {
-    console.log('adfasdf')
     if (wechatSignVerify(signature, timestamp, nonce)) {
       res.send(echostr);
       return;
@@ -33,11 +32,12 @@ const wechatSignVerify = (signature, timestamp, nonce) => {
   let arr = [nonce, timestamp, config.wetchat.token]
   arr.sort();
 
-  let original = oriArray.join('');
-  let shaObj = new jsSHA(original, 'TEXT');
-  let scyptoString = shaObj.getHash('SHA-1', 'HEX');
-  console.log(scyptoString + "  :   " + signature);
-  return signature.length && scyptoString === signature;
+  let original = arr.join('');
+  let shaObj = new jsSHA('SHA-1', 'TEXT');
+  shaObj.update(original);
+  let scyptoString = shaObj.getHash('HEX');
+  console.debug(scyptoString + "  :   " + signature);
+  return scyptoString === signature;
 }
 
 module.exports = router;
