@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "babel-node ./bin/main.js",
-        "debug": "nodemon ./bin/main.js --exec babel-node",
+        "debug": "DEBUG=app:* nodemon ./bin/main.js --exec babel-node",
         "vscode-debug": "babel-node ./bin/main.js --nolazy --inspect-brk=9229",
         "build": "babel bin -d dist",
         "server": "node ./dist/main.js"
@@ -15,7 +15,6 @@
         "debug": "~2.6.9",
         "express": "~4.16.0",
         "http-errors": "~1.6.2",
-        "jade": "~1.11.0",
         "jssha": "^2.3.1",
         "morgan": "~1.9.0"
     },

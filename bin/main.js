@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('tiaobigzh:server');
+var debug = require('debug')('app:server');
 var http = require('http');
 
 /**
