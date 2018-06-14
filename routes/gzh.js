@@ -38,9 +38,7 @@ router.route('/')
     })
     .post((req, res, next) => { //微信事件推送
         debug('\n\nbody: ');
-        debug(req.body);
-        debug('\n\nparams: ')
-        debug(req.params);
+        debug(req);
 
         res.sendStatus(200);
     });
