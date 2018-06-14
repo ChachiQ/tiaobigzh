@@ -1,12 +1,11 @@
-var express = require('express');
-var config = require('../config');
-var router = express.Router();
-var debug = require('debug')('app:gzh');
+const express = require('express');
+const config = require('../config');
+const router = express.Router();
+const debug = require('debug')('app:gzh');
 
-var WechatApi = require('co-wechat-api');
-var wechat = new WechatApi(config.wetchat.appid, config.wetchat.appSecret);
-
-var jsSHA = require('jssha');
+const WechatApi = require('co-wechat-api');
+const wechat = new WechatApi(config.wetchat.appid, config.wetchat.appSecret);
+const wechatHelper = require('../utils/wechat');
 
 var createHttpError = require('http-errors');
 
@@ -17,7 +16,7 @@ router.use('/', (req, res, next) => { //微信校验
         let timestamp = req.query.timestamp;
         let nonce = req.query.nonce;
         if (signature && timestamp && nonce) {
-            if (wechatSignVerify(signature, timestamp, nonce)) {
+            if (wechatHelper.verifySignature(signature, timestamp, nonce)) {
                 next();
                 return;
             }
@@ -43,10 +42,21 @@ router.route('/')
             buffer.push(data);
         });
         //监听 end 事件 用于处理接收完成的数据
-        req.on('end', function() {
-            //输出接收完成的数据   
-            debug(Buffer.concat(buffer).toString('utf-8'));
-            res.send('success');
+        req.on('end', async function() {
+            //输出接收完成的数据
+            let msgXml = Buffer.concat(buffer).toString('utf-8')
+            debug(msgXml);
+
+            try {
+                let msg = await wechatHelper.parseMessage(msgXml, req);
+                debug(msg);
+                res.send('success');
+            } catch (err) {
+                res.status(400).send(err);
+            }
+
+
+
         });
     });
 
@@ -55,17 +65,5 @@ router.get('/update_menu', async function (req, res, next) {
     debug(result);
     res.status(200).send(result);
 })
-
-const wechatSignVerify = (signature, timestamp, nonce) => {
-    let arr = [nonce, timestamp, config.wetchat.token]
-    arr.sort();
-
-    let original = arr.join('');
-    let shaObj = new jsSHA('SHA-1', 'TEXT');
-    shaObj.update(original);
-    let scyptoString = shaObj.getHash('HEX');
-    debug(scyptoString + "  :   " + signature);
-    return scyptoString === signature;
-}
 
 module.exports = router;
