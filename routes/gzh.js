@@ -35,21 +35,12 @@ router.route('/')
         res.sendStatus(200);
     })
     .post((req, res, next) => { //微信事件推送
+        debug('in / post');
         debug(req);
         debug(req.rawHeaders)
         debug(req.body);
         debug(req.params);
 
-        let signature = req.query.signature;
-        let timestamp = req.query.timestamp;
-        let echostr = req.query.echostr;
-        let nonce = req.query.nonce;
-        if (signature && timestamp && echostr) {
-            if (wechatSignVerify(signature, timestamp, nonce)) {
-                res.send(echostr);
-                return;
-            }
-        }
         res.sendStatus(200);
     });
 
