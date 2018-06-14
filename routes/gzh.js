@@ -1,7 +1,7 @@
 var express = require('express');
 var config = require('../config');
 var router = express.Router();
-var debug = require('debug')('app.gzh');
+var debug = require('debug')('app:gzh');
 
 var WechatApi = require('co-wechat-api');
 var wechat = new WechatApi(config.wetchat.appid, config.wetchat.appSecret);
@@ -19,9 +19,11 @@ router.use('/', (req, res, next) => { //微信校验
         if (signature && timestamp && nonce) {
             if (wechatSignVerify(signature, timestamp, nonce)) {
                 next();
+                return;
             }
         }
         next(createHttpError(403));
+        return;
     }
     next();
 })
@@ -35,10 +37,9 @@ router.route('/')
         res.sendStatus(200);
     })
     .post((req, res, next) => { //微信事件推送
-        debug('in / post');
-        debug(req);
-        debug(req.rawHeaders)
+        debug('\n\nbody: ');
         debug(req.body);
+        debug('\n\nparams: ')
         debug(req.params);
 
         res.sendStatus(200);
