@@ -8,10 +8,38 @@ var wechat = new WechatApi(config.wetchat.appid, config.wetchat.appSecret);
 
 var jsSHA = require('jssha');
 
+var createHttpError = require('http-errors');
+
+router.use('/', (req, res, next) => { //微信校验
+    debug(req.query);
+    if (req.path === "/") {
+        let signature = req.query.signature;
+        let timestamp = req.query.timestamp;
+        let nonce = req.query.nonce;
+        if (signature && timestamp && nonce) {
+            if (wechatSignVerify(signature, timestamp, nonce)) {
+                next();
+            }
+        }
+        next(createHttpError(403));
+    }
+    next();
+})
 
 router.route('/')
-    .get((req, res, next) => { //微信校验
-        debug(req.query);
+    .get((req, res, next) => {
+        let echostr = req.query.echostr;
+        if (echostr) {
+            res.send(echostr);
+        }
+        res.sendStatus(200);
+    })
+    .post((req, res, next) => { //微信事件推送
+        debug(req);
+        debug(req.rawHeaders)
+        debug(req.body);
+        debug(req.params);
+
         let signature = req.query.signature;
         let timestamp = req.query.timestamp;
         let echostr = req.query.echostr;
@@ -23,11 +51,7 @@ router.route('/')
             }
         }
         res.sendStatus(200);
-    })
-    .post((req, res, next) => { //微信事件推送
-        debug(req);
-        res.sendStatus(200);
-    })
+    });
 
 router.get('/update_menu', async function (req, res, next) {
     let result = await wechat.createMenu(config.gzhMenu);
