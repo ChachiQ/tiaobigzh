@@ -1,6 +1,5 @@
 import { parseString } from "xml2js";
 import crypto from "crypto";
-import jsSHA from "jssha";
 
 const config = require('../config.js');
 const xmlParser = require('xml2js');
@@ -44,11 +43,9 @@ function verifySignature(signature, timestamp, nonce, message) {
     if (message) {
         arr.push(message);
     }
-
     let original = arr.sort().join('');
-    let shaObj = new jsSHA('SHA-1', 'TEXT');
-    shaObj.update(original);
-    let scyptoString = shaObj.getHash('HEX');
+    let hashCode = crypto.createHash('sha1');
+    let scyptoString = hashCode.update(original, 'utf8').digest('hex');
     return scyptoString === signature;
 }
 
