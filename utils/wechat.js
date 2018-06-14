@@ -53,11 +53,9 @@ function verifySignature(signature, timestamp, nonce, message) {
 }
 
 function decryptMesage(encryptMsg, timestamp, nonce, signature) {
-    //获取签名认证
-    let tempSignature = getMessageSignature(encryptMsgtimestamp, nonce);
-    //判断消息是否来自微信服务器
+    //获取签名认证, 判断消息是否来自微信服务器
     if (!verifySignature(signature, timestamp, nonce, encryptMsg)) {
-        throw new Error('msgSignature is not invalid')
+        throw new Error('message Signature is not invalid')
     }
 
     //实例 AES 解密对象
