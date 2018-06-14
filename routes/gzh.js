@@ -32,6 +32,7 @@ router.route('/')
         let echostr = req.query.echostr;
         if (echostr) {
             res.send(echostr);
+            return;
         }
         res.sendStatus(200);
     })
@@ -54,8 +55,6 @@ router.route('/')
             } catch (err) {
                 res.status(400).send(err);
             }
-
-
 
         });
     });
