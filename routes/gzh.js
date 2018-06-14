@@ -37,10 +37,17 @@ router.route('/')
         res.sendStatus(200);
     })
     .post((req, res, next) => { //微信事件推送
-        debug('\n\nbody: ');
-        debug(req);
-
-        res.sendStatus(200);
+        var buffer = [];
+        //监听 data 事件 用于接收数据
+        req.on('data', function(data) {
+            buffer.push(data);
+        });
+        //监听 end 事件 用于处理接收完成的数据
+        req.on('end', function() {
+            //输出接收完成的数据   
+            debug(Buffer.concat(buffer).toString('utf-8'));
+            res.send('success');
+        });
     });
 
 router.get('/update_menu', async function (req, res, next) {
