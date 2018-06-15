@@ -51,14 +51,10 @@ router.route('/')
             try {
                 let msg = await wechatHelper.parseMessage(msgXml, req);
                 debug(msg);
-
-                let replyMsg = wechatHelper.buildXmlTextMessage(msg.FromUserName, msg.ToUserName, "你好 " + msg.Content);
-                res.send(wechatHelper.encryptMessageIfRequired(replyMsg, req));
-            //res.send('success');
+                handleMessage(msg, req, res);
             } catch (err) {
                 res.status(400).send(err);
             }
-
         });
     });
 
@@ -67,5 +63,25 @@ router.get('/update_menu', async function (req, res, next) {
     debug(result);
     res.status(200).send(result);
 })
+
+//---------------- message handler ------------------------
+
+function handleMessage(msg, req, res) {
+    let toUser = msg.ToUserName; //接收方微信
+    let fromUser = msg.FromUserName; //发送仿微信
+    let reportMsg = null; //声明回复消息的变量 
+    let msgType = msg.MsgType.toLowerCase();
+
+    if (msgType === "event") { //处理事件类型消息
+        let event = msg.Event.toLowerCase();
+    //DO EVENT
+    } else if (msgType === "text") { //处理文本消息
+        reportMsg = "hello " + msg.Content;
+    }
+    reportMsg = reportMsg ?
+        wechatHelper.buildXmlTextMessage(msg.FromUserName, msg.ToUserName, reportMsg) :
+        "success";
+    res.send(wechatHelper.encryptMessageIfRequired(reportMsg, req));
+}
 
 module.exports = router;
