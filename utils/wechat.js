@@ -69,6 +69,46 @@ function decryptMesage(encryptMsg, timestamp, nonce, signature) {
     return parseXmlToJSON(deEncryptedMsg);
 }
 
+/**
+ * 生成XML文本消息
+ * @param {String} toUser 接收用户
+ * @param {String} fromUser 发送用户
+ * @param {String}  content 发送消息
+ */
+function buildXmlTextMessage(toUser, fromUser, content) {
+    var xmlContent = "<xml><ToUserName><![CDATA[" + toUser + "]]></ToUserName>";
+    xmlContent += "<FromUserName><![CDATA[" + fromUser + "]]></FromUserName>";
+    xmlContent += "<CreateTime>" + new Date().getTime() + "</CreateTime>";
+    xmlContent += "<MsgType><![CDATA[text]]></MsgType>";
+    xmlContent += "<Content><![CDATA[" + content + "]]></Content></xml>";
+    return xmlContent;
+}
+
+/**
+ * 生成XML图文消息
+ * @param {String} toUser 接收用户
+ * @param {String} fromUser 发送用户
+ * @param {Array}  contentArr 图文信息集合
+ */
+function buildXmlGraphicMessage(toUser, fromUser, contentArr) {
+    var xmlContent = "<xml><ToUserName><![CDATA[" + toUser + "]]></ToUserName>";
+    xmlContent += "<FromUserName><![CDATA[" + fromUser + "]]></FromUserName>";
+    xmlContent += "<CreateTime>" + new Date().getTime() + "</CreateTime>";
+    xmlContent += "<MsgType><![CDATA[news]]></MsgType>";
+    xmlContent += "<ArticleCount>" + contentArr.length + "</ArticleCount>";
+    xmlContent += "<Articles>";
+    contentArr.map(function(item, index) {
+        xmlContent += "<item>";
+        xmlContent += "<Title><![CDATA[" + item.Title + "]]></Title>";
+        xmlContent += "<Description><![CDATA[" + item.Description + "]]></Description>";
+        xmlContent += "<PicUrl><![CDATA[" + item.PicUrl + "]]></PicUrl>";
+        xmlContent += "<Url><![CDATA[" + item.Url + "]]></Url>";
+        xmlContent += "</item>";
+    });
+    xmlContent += "</Articles></xml>";
+    return xmlContent;
+}
+
 function encryptMsg(xmlMsg, timestamp, nonce) {
     //声明 16位的随机字符串
     var random = crypto.randomBytes(8).toString('hex');
@@ -96,6 +136,16 @@ function encryptMsg(xmlMsg, timestamp, nonce) {
     });
 }
 
+/**
+ * 根据request判断是否需要进行加密;
+ *  如果需要加密，返回加密后的字符串
+ *  如果不需要加密，返回原文
+ * @param {String} xmlMsg XML字符串
+ * @param {Request} req reqeuest
+ */
+function encryptMessageIfRequired(xmlMsg, req) {
+    return req.query.encrypt_type === 'aes' ? encryptMsg(xmlMsg) : xmlMsg;
+}
 
 function parseXmlToJSON(xml) {
     if (!xml || typeof xml != 'string') return {};
@@ -135,4 +185,7 @@ function KCS7Encoder(text_length) {
 module.exports = {
     verifySignature,
     parseMessage,
+    encryptMessageIfRequired,
+    buildXmlTextMessage,
+    buildXmlGraphicMessage,
 };
