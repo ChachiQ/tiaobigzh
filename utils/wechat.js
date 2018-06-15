@@ -49,6 +49,13 @@ function verifySignature(signature, timestamp, nonce, message) {
     return scyptoString === signature;
 }
 
+function getMessageSignature(message, timestamp, nonce) {
+    let arr = [nonce, timestamp, config.wetchat.token, message];
+    let original = arr.sort().join('');
+    let hashCode = crypto.createHash('sha1');
+    return hashCode.update(original, 'utf8').digest('hex');
+}
+
 function decryptMesage(encryptMsg, timestamp, nonce, signature) {
     //获取签名认证, 判断消息是否来自微信服务器
     if (!verifySignature(signature, timestamp, nonce, encryptMsg)) {

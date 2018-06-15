@@ -53,7 +53,7 @@ router.route('/')
                 debug(msg);
 
                 let replyMsg = wechatHelper.buildXmlTextMessage(msg.FromUserName, msg.ToUserName, "你好 " + msg.Content);
-                res.send(wechatHelper.encryptMessageIfRequired(replyMsg));
+                res.send(wechatHelper.encryptMessageIfRequired(replyMsg, req));
             //res.send('success');
             } catch (err) {
                 res.status(400).send(err);
