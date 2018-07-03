@@ -62,3 +62,6 @@ typings/
 
 #build folder
 dist/
+
+.pwd
+.ram_crawler_ctx

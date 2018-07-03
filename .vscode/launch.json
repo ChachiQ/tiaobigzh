@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch via NPM",
+            "name": "Launch GZH Server",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run-script",
@@ -18,8 +18,13 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "启动程序",
-            "program": "${workspaceFolder}/bin/main.js"
+            "name": "RAM Tracker",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "vscode-ram-crawler-debug"
+            ],
+            "port": 9229
         }
     ]
 }
