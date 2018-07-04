@@ -52,7 +52,7 @@ async function crawleNextRamActions(crawler) {
     for await (const act of rsp.actions){
         await processRamTradeAction(crawler,act);
     }
-    crawler.ctx.pos+=(crawler.ctx.pos+1)*crawler.ctx.offset;
+    crawler.ctx.pos+=crawler.ctx.offset;
     writeCtxToFile(crawler)
     return rsp.actions.length;
 }
