@@ -160,6 +160,7 @@ async function createNewIndexsInrequired(crawler, renew) {
 
 function readCtxFromFile(crawler) {
     if (!fs.existsSync(crawler.ctxFileName)) {
+        console.log(`1write file ${crawler.ctxFileName}`)
         fs.writeFileSync(crawler.ctxFileName, JSON.stringify(INIT_CTX));
         crawler.ctx = INIT_CTX;
     } else {
@@ -168,6 +169,7 @@ function readCtxFromFile(crawler) {
 }
 
 function writeCtxToFile(crawler) {
+    console.log(`2write file ${crawler.ctxFileName}`)
     fs.writeFileSync(crawler.ctxFileName, JSON.stringify(crawler.ctx || INIT_CTX));
 }
 
