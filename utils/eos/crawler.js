@@ -17,7 +17,7 @@ function mergeCrawlerFuncs(eos) {
             let that = this;
             let trans = this._transCache.get(id);
             if (trans) {
-                console.debug('hit transaction cache');
+                //console.debug('hit transaction cache');
                 return Promise.resolve(trans);
             }
 

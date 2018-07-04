@@ -95,8 +95,8 @@ async function processRamTradeAction(crawler,act){
     }else{ //unknown action
         throw 'unknown ram trade action';
     }
-    console.debug(`${log.action}, ${log.amount}, ${log.bytes?log.bytes:-1} bytes`)
-    console.debug(`base: ${crawler.ctx.market.base.balance.amountInt64} , quto: ${crawler.ctx.market.base.balance.amountInt64}\n`)
+    //console.debug(`${log.action}, ${log.amount}, ${log.bytes?log.bytes:-1} bytes`)
+    //console.debug(`base: ${crawler.ctx.market.base.balance.amountInt64} , quto: ${crawler.ctx.market.base.balance.amountInt64}\n`)
 
     let result = await crawler.esClient.index({
             index: RAM_TRADE_LOG_INDEX,
