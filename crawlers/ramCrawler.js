@@ -10,7 +10,7 @@ var RamCrawler = (opts, renew) => {
         eos: null,
         esClient: null, //elastic search instance
         ctxFileName: path.format({ //the context path of last run
-            dir: process.cwd(),
+            dir: __dirname,
             base: '.ram_crawler_ctx'
         }),
         ctx: null,

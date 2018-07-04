@@ -8,6 +8,7 @@
         "vscode-debug": "DEBUG=app:* babel-node ./bin/main.js --nolazy --inspect-brk=9229",
         "build": "babel bin -d dist",
         "server": "node ./dist/main.js",
+
         "ram-tracker": "babel-node ./bin/ramTracker",
         "debug-ram-tracker": "DEBUG=eos:* nodemon ./bin/ramTracker.js --exec babel-node",
         "vscode-ram-crawler-debug": "DEBUG=app:* babel-node ./bin/ramTracker --nolazy --inspect-brk=9229"
