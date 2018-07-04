@@ -31,7 +31,7 @@ var RamCrawler = (opts, renew) => {
                     console.log('sleep 5 seconds, and try again...');
                     await sleep(5000);
                 }else{
-                    console.log(`crawled logs, page: ${this.ctx.pos} , count: ${this.ctx.offset}, last_action_id: ${this.ctx.lastActId}, used ${t} seconds`);
+                    console.log(`crawled ${this.ctx.offset} logs, last_action_id: ${this.ctx.lastActId}, used ${t} seconds`);
                 }
             }
             
@@ -64,7 +64,7 @@ async function processRamTradeAction(crawler,act){
         //这段数据之前已经存过
         return;
     }
-    //console.log(`pos: ${crawler.ctx.pos}, ${info.actId}`);
+    console.log(`pos: ${crawler.ctx.pos}, ${info.actId}`);
     let log = {
         t:info.time,
         actId: info.actId,
@@ -73,7 +73,7 @@ async function processRamTradeAction(crawler,act){
         transId: info.transId,
         ram: info.bytes,
         fee: info.fee.amountInt64,
-        amount: info.price.amountInt64 * info.action === symbol.SELL_RAM_ACTION ? 1 : -1,
+        amount: info.price.amountInt64 * (info.action === symbol.SELL_RAM_ACTION ? 1 : -1),
         action: info.action,
     }
     if(info.action === symbol.BUY_RAM_ACTION){
@@ -95,7 +95,7 @@ async function processRamTradeAction(crawler,act){
     }else{ //unknown action
         throw 'unknown ram trade action';
     }
-    //console.debug(`${log.action}, ${log.amount}, ${log.bytes?log.bytes:-1} bytes`)
+    //console.log(`${log.action}, ${log.amount}, ${log.bytes?log.bytes:-1} bytes`)
     //console.debug(`base: ${crawler.ctx.market.base.balance.amountInt64} , quto: ${crawler.ctx.market.base.balance.amountInt64}\n`)
 
     let result = await crawler.esClient.index({
