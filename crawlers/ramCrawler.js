@@ -31,7 +31,7 @@ var RamCrawler = (opts, renew) => {
                     console.log('sleep 5 seconds, and try again...');
                     await sleep(5000);
                 }else{
-                    console.log(`crawled ${this.ctx.offset} logs, last_action_id: ${this.ctx.lastActId}, used ${t} seconds`);
+                    console.log(`crawled ${this.ctx.offset} logs, from pos: ${this.ctx.pos}, last_action_id: ${this.ctx.lastActId}, used ${t} seconds`);
                 }
             }
             
@@ -64,7 +64,7 @@ async function processRamTradeAction(crawler,act){
         //这段数据之前已经存过
         return;
     }
-    console.log(`pos: ${crawler.ctx.pos}, ${info.actId}`);
+    //console.log(`pos: ${crawler.ctx.pos}, ${info.actId}`);
     let log = {
         t:info.time,
         actId: info.actId,
