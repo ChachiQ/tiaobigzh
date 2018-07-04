@@ -1,5 +1,9 @@
-
-var pwd = JSON.parse(require('fs').readFileSync('./.pwd'));
+import path from 'path';
+var pwdFileName = path.format({ //the context path of last run
+    dir: __dirname,
+    base: '.pwd'
+})
+var pwd = JSON.parse(require('fs').readFileSync(pwdFileName));
 
 module.exports = {
     debug: true,
