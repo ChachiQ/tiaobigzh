@@ -32,6 +32,8 @@ var RamCrawler = (opts, renew) => {
                     await sleep(5000);
                 }else{
                     console.log(`crawled ${this.ctx.offset} logs, from pos: ${this.ctx.pos}, last_action_id: ${this.ctx.lastActId}, used ${t} seconds`);
+                    crawler.ctx.pos += crawler.ctx.offset;
+                    writeCtxToFile(crawler);
                 }
             }
             
@@ -52,8 +54,6 @@ async function crawleNextRamActions(crawler) {
     for await (const act of rsp.actions){
         await processRamTradeAction(crawler,act);
     }
-    crawler.ctx.pos+=crawler.ctx.offset;
-    writeCtxToFile(crawler)
     return rsp.actions.length;
 }
 
