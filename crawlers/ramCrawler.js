@@ -31,7 +31,7 @@ var RamCrawler = (opts, renew) => {
                     console.log('sleep 5 seconds, and try again...');
                     await sleep(5000);
                 }else{
-                    console.log(`crawled logs, pos: ${this.ctx.pos} , offset: ${this.ctx.offset}, last_action_id: ${this.ctx.lastActId}, used ${t} seconds`);
+                    console.log(`crawled logs, page: ${this.ctx.pos} , count: ${this.ctx.offset}, last_action_id: ${this.ctx.lastActId}, used ${t} seconds`);
                 }
             }
             
@@ -43,7 +43,7 @@ var RamCrawler = (opts, renew) => {
 export default RamCrawler;
 
 async function crawleNextRamActions(crawler) {
-    let rsp = await crawler.eos.getActions(symbol.RAM_ACCOUNT, crawler.ctx.pos, crawler.ctx.offset);
+    let rsp = await crawler.eos.getActions(symbol.RAM_ACCOUNT, crawler.ctx.pos, crawler.ctx.offset-1);
     
     if(rsp.actions.length === 0){
         return 0;
@@ -52,7 +52,7 @@ async function crawleNextRamActions(crawler) {
     for await (const act of rsp.actions){
         await processRamTradeAction(crawler,act);
     }
-    crawler.ctx.pos++;
+    crawler.ctx.pos+=(crawler.ctx.pos+1)*crawler.ctx.offset;
     writeCtxToFile(crawler)
     return rsp.actions.length;
 }
@@ -64,7 +64,7 @@ async function processRamTradeAction(crawler,act){
         //这段数据之前已经存过
         return;
     }
-
+    //console.log(`pos: ${crawler.ctx.pos}, ${info.actId}`);
     let log = {
         t:info.time,
         actId: info.actId,
