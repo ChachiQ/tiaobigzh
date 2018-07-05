@@ -71,11 +71,11 @@ function mergeCrawlerFuncs(eos) {
                             }) >= 0
                     })
                     if (!tradeAction) {
-                        reject({
+                        resolve({
                             valid: false,
                             success: false,
-                            srcAction: trsfrAction,
-                            error: "can't find ram trade info from this action"
+                            srcAction: JSON.stringify(trsfrAction),
+                            error: "can't find ram trade info from this action",
                         })
                         return;
                     }
