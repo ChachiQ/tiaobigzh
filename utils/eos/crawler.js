@@ -92,24 +92,18 @@ function mergeCrawlerFuncs(eos) {
                     }
 
                     if (tradeAct.name === symbol.SELL_RAM_ACTION) {
+                        let feeAct = tradeAction.inline_traces.find((t) => {
+                            return t.act.name === symbol.TRANSFER_ACTION && t.act.data.to === symbol.RAM_FEE_ACCOUNT && t.act.data.from === tradeAct.data.account
+                        })
+                        let fee = feeAct ? AsSet(feeAct.act.quantity) : asSetOfEOS(0);
                         Object.assign(tradeInfo, {
                             operator: tradeAct.data.account,
                             reciver: tradeAct.data.account,
                             bytes: 1 * parseInt(tradeAct.data.bytes),
                             price: AsSet(trsfrAction.action_trace.act.data.quantity),
-                            fee: AsSet(tradeAction.inline_traces.find((t) => {
-                                return t.act.name === symbol.TRANSFER_ACTION && t.act.data.to === symbol.RAM_FEE_ACCOUNT && t.act.data.from === tradeAct.data.account
-                            }).act.data.quantity)
+                            fee,
                         })
                     } else {
-                        // console.log(JSON.stringify(trsfrAction));
-                        // console.log("\n")
-                        // console.log(JSON.stringify(tradeAction));
-                        // console.log("\n")
-                        // console.log(JSON.stringify(tradeAction.inline_traces.find((t) => {
-                        //     return t.act.name === symbol.TRANSFER_ACTION && t.act.data.to === symbol.RAM_FEE_ACCOUNT && (t.act.data.from === tradeAct.data.payer || tradeAct.data.account)
-                        // })))
-                        // console.log("\n\n\n");
                         let feeAct = tradeAction.inline_traces.find((t) => {
                             return t.act.name === symbol.TRANSFER_ACTION && t.act.data.to === symbol.RAM_FEE_ACCOUNT && (t.act.data.from === tradeAct.data.payer || tradeAct.data.account)
                         });
