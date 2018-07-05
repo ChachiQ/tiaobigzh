@@ -46,11 +46,12 @@ function mergeCrawlerFuncs(eos) {
 
         crawlRamTradeInfoFromTransferAction(trsfrAction) {
             if (!this.isRamTradeInlineTransferAction(trsfrAction)) {
+                console.log(JSON.stringify(trsfrAction));
                 return Promise.resolve({
                     valid: false,
                     success: false,
                     srcAction: trsfrAction,
-                    error: "invalid transfer form RAM trade."
+                    error: `invalid transfer form RAM trade. action: ${trsfrAction.action_trace.act.name}`
                 });
             }
 
@@ -82,6 +83,8 @@ function mergeCrawlerFuncs(eos) {
                     let tradeAct = tradeAction.act
 
                     let tradeInfo = {
+                        success: true,
+                        valid: true,
                         time: trans.block_time,
                         transId,
                         action: tradeAct.name,

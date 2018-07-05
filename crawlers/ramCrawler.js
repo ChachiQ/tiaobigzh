@@ -64,7 +64,12 @@ async function processRamTradeAction(crawler,act){
         //这段数据之前已经存过
         return;
     }
-    //console.log(`pos: ${crawler.ctx.pos}, ${info.actId}`);
+
+    if(!info.success){
+        console.log(info.error);
+        return;
+    }
+
     let log = {
         t:info.time,
         actId: info.actId,
