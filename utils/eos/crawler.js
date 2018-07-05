@@ -46,7 +46,7 @@ function mergeCrawlerFuncs(eos) {
 
         crawlRamTradeInfoFromTransferAction(trsfrAction) {
             if (!this.isRamTradeInlineTransferAction(trsfrAction)) {
-                console.log(JSON.stringify(trsfrAction));
+                //console.log(JSON.stringify(trsfrAction));
                 return Promise.resolve({
                     valid: false,
                     success: false,

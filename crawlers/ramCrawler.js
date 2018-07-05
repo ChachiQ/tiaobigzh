@@ -84,7 +84,7 @@ async function processRamTradeAction(crawler,act){
     if(info.action === symbol.BUY_RAM_ACTION){
         let ramExc = RamExchanger(crawler.ramExchanger.market);
         let bytes = ramExc.convert(info.price,'RAM');
-        log.bytes = bytes;
+        log.bytes = bytes.amountInt64;
 
         simulateBuyTrade(crawler,info.price)
     }else if(info.action === symbol.BUY_RAM_BYTES_ACTION){
