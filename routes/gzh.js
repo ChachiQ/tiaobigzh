@@ -76,7 +76,7 @@ function handleMessage(msg, req, res) {
         let event = msg.Event.toLowerCase();
     //DO EVENT
     } else if (msgType === "text") { //处理文本消息
-        reportMsg = "hello " + msg.Content;
+        reportMsg = "hello " + fromUser;
     }
     reportMsg = reportMsg ?
         wechatHelper.buildXmlTextMessage(msg.FromUserName, msg.ToUserName, reportMsg) :
