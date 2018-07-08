@@ -60,7 +60,7 @@ async function crawleNextRamActions(crawler) {
 async function processRamTradeAction(crawler,act){
     let info = await crawler.eos.crawlRamTradeInfoFromTransferAction(act);
 
-    if(info.actId <= crawler.lastActId){
+    if(info.gActId <= crawler.lastActId){
         //这段数据之前已经存过
         return;
     }
@@ -72,9 +72,10 @@ async function processRamTradeAction(crawler,act){
 
     let log = {
         t:info.time,
-        actId: info.actId,
+        gActId: info.gActId,
+        aActId: info.aActId,
         operator: info.operator,
-        reciver: info.reciver,
+        receiver: info.reciver,
         transId: info.transId,
         ram: info.bytes,
         fee: info.fee.amountInt64,
@@ -106,12 +107,12 @@ async function processRamTradeAction(crawler,act){
     let result = await crawler.esClient.index({
             index: RAM_TRADE_LOG_INDEX,
             type: "doc",
-            id: log.actId.toString(),
+            id: log.gActId.toString(),
             body: log,
         })
      
     if (result.result === "created" || result.result === "noop" || result.result === "updated"){
-        crawler.ctx.lastActId = log.actId;
+        crawler.ctx.lastActId = log.gActId;
         writeCtxToFile(crawler);
     }else{
         console.log(result);
@@ -260,7 +261,10 @@ const RAM_TRADE_INFO_STRUCT = {
         action: {
             type: "text"
         },
-        actId: {
+        gActId: {
+            type: "long",
+        },
+        aActId: {
             type: "long",
         }
     }

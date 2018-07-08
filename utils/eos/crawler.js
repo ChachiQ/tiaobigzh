@@ -50,7 +50,7 @@ function mergeCrawlerFuncs(eos) {
                 return Promise.resolve({
                     valid: false,
                     success: false,
-                    srcAction: trsfrAction,
+                    srcAction: JSON.stringify(trsfrAction),
                     error: `invalid transfer form RAM trade. action: ${trsfrAction.action_trace.act.name}`
                 });
             }
@@ -88,14 +88,15 @@ function mergeCrawlerFuncs(eos) {
                         time: trans.block_time,
                         transId,
                         action: tradeAct.name,
-                        actId: trsfrAction.global_action_seq
+                        gActId: trsfrAction.global_action_seq,
+                        aActId: trsfrAction.account_action_seq,
                     }
 
                     if (tradeAct.name === symbol.SELL_RAM_ACTION) {
                         let feeAct = tradeAction.inline_traces.find((t) => {
                             return t.act.name === symbol.TRANSFER_ACTION && t.act.data.to === symbol.RAM_FEE_ACCOUNT && t.act.data.from === tradeAct.data.account
                         })
-                        let fee = feeAct ? AsSet(feeAct.act.quantity) : asSetOfEOS(0);
+                        let fee = feeAct ? AsSet(feeAct.act.data.quantity) : asSetOfEOS(0);
                         Object.assign(tradeInfo, {
                             operator: tradeAct.data.account,
                             reciver: tradeAct.data.account,
@@ -105,13 +106,13 @@ function mergeCrawlerFuncs(eos) {
                         })
                     } else {
                         let feeAct = tradeAction.inline_traces.find((t) => {
-                            return t.act.name === symbol.TRANSFER_ACTION && t.act.data.to === symbol.RAM_FEE_ACCOUNT && (t.act.data.from === tradeAct.data.payer || tradeAct.data.account)
+                            return t.act.name === symbol.TRANSFER_ACTION && t.act.data.to === symbol.RAM_FEE_ACCOUNT && (t.act.data.from === tradeAct.data.payer || t.act.data.from === tradeAct.data.account)
                         });
-                        let fee = feeAct ? AsSet(feeAct.act.quantity) : asSetOfEOS(0);
+                        let fee = feeAct ? AsSet(feeAct.act.data.quantity) : asSetOfEOS(0);
                         Object.assign(tradeInfo, {
                             operator: tradeAct.data.payer || tradeAct.data.account,
                             reciver: tradeAct.data.receiver || tradeAct.data.account,
-                            price: AsSet(trsfrAction.action_trace.act.data.quantity),
+                            price: asSetOfEOS((AsSet(trsfrAction.action_trace.act.data.quantity).amountInt64 + fee.amountInt64) / 10000),
                             fee,
                         })
                         if (tradeAct.name === symbol.BUY_RAM_BYTES_ACTION) {
@@ -123,7 +124,7 @@ function mergeCrawlerFuncs(eos) {
                     reject({
                         valid: true,
                         success: false,
-                        srcAction: trsfrAction,
+                        srcAction: JSON.stringify(trsfrAction),
                         error,
                     });
                 }
