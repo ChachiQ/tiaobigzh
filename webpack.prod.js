@@ -6,10 +6,10 @@ const webpack = require('webpack');
 
 module.exports = merge(common, {
     mode: "production",
-    // devtool: "cheap-module-source-map",
+    devtool: "cheap-module-source-map",
     plugins: [
         new UglifyJSPlugin({
-            sourceMap: false,
+            sourceMap: true,
         }),
         new webpack.DefinePlugin({
             minimize: true,
