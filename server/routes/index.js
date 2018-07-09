@@ -5,8 +5,12 @@ var path = require('path');
 
 /* GET home page. */
 router.get('/', function(_, res) {
-  console.log('12sdfasdf')
-  res.render('index');
+  try {
+    res.render('index');
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 });
 
 module.exports = router;
