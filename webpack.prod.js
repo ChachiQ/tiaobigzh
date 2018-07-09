@@ -16,7 +16,7 @@ module.exports = merge(common, {
             compress: {
                 warnings: false
             },
-            'ENV': JSON.stringify('production')
+            ENV: JSON.stringify('production')
         })
     ],
 });
