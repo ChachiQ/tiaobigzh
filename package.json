@@ -3,9 +3,9 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "NODE_ENV=development babel-node ./server/server.js",
-        "build": "webpack --progress --colors --config webpack.prod.js",
-        "dev": "NODE_ENV=development nodemon --watch server --watch app.js --exec babel-node -- ./server/server.js",
+        "start": "cross-env NODE_ENV=development babel-node ./server/server.js",
+        "build": "cross-env NODE_ENV=production webpack --progress --colors --config webpack.prod.js",
+        "dev": "cross-env NODE_ENV=development nodemon --watch server --watch app.js --exec babel-node -- ./server/server.js",
         "server": "npm run build & NODE_ENV=production babel-node ./server/server.js",
         "vscode-debug": "DEBUG=app:* babel-node ./bin/server.js --nolazy --inspect-brk=9229",
         "ram-tracker": "babel-node ./server/ramTracker"
@@ -36,6 +36,7 @@
         "babel-preset-react": "^6.24.1",
         "babel-preset-stage-3": "^6.24.1",
         "clean-webpack-plugin": "^0.1.19",
+        "cross-env": "^5.2.0",
         "html-webpack-plugin": "^3.2.0",
         "nodemon": "^1.17.5",
         "react-hot-loader": "^4.3.3",
