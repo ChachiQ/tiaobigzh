@@ -10,9 +10,6 @@ module.exports = merge(common, {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.DefinePlugin({
-            ENV: JSON.stringify('development')
-        }),
+        new webpack.NoEmitOnErrorsPlugin()
     ],
 });

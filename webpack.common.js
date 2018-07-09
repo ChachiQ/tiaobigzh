@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     entry: {
@@ -8,6 +9,9 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: './server/views/index/index.html',

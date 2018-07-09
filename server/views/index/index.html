@@ -7,7 +7,7 @@
 
 <body>
     <div id="app"></div>
-    <% if (ENV !== "production") { %>
+    <% if (process.env.NODE_ENV !== "production") { %>
         <script src="/reload/reload.js"></script>
         <% } %>
 </body>
