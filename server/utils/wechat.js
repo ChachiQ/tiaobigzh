@@ -1,7 +1,8 @@
 import { parseString } from "xml2js";
 import crypto from "crypto";
 
-const config = require('../config.js');
+var appRoot = require('app-root-path');
+const config = require(appRoot + '/config');
 const xmlParser = require('xml2js');
 const buildXML = new xmlParser.Builder({
     rootName: 'xml',

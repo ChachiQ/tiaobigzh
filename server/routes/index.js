@@ -1,11 +1,12 @@
 var express = require('express');
-var config = require('../config');
 var router = express.Router();
 var debug = require('debug')('app.index');
+var path = require('path');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.sendStatus(200);
+router.get('/', function(_, res) {
+  console.log('12sdfasdf')
+  res.render('index');
 });
 
 module.exports = router;

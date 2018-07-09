@@ -4,13 +4,15 @@ const webpack = require('webpack');
 
 module.exports = merge(common, {
     mode: "development",
-    devtool: 'inline-source-map',
-    devServer: {
-        contentBase: './dist'
+    devtool: 'cheap-module-eval-source-map',
+    output: {
+        publicPath: '/'
     },
     plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('development')
-        })
+            'ENV': JSON.stringify('development')
+        }),
     ],
 });

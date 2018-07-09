@@ -1,11 +1,12 @@
 const debug = require('debug')('ramTracker:main');
+var appRoot = require('app-root-path');
 const program = require('commander');
-const config = require('../config');
-const eosHelper = require('../utils/eos/eosHelper');
+const config = require(appRoot + "/config");
+const eosHelper = require('./utils/eos/eosHelper');
 const eos = eosHelper.Eos(config.eos.getEnv());
 import Elasticsearch from 'elasticsearch';
 
-import RamCrawler from '../crawlers/ramCrawler';
+import RamCrawler from './crawlers/ramCrawler';
 
 var esClient = new Elasticsearch.Client({
     host: config.crawler.elasticsearchHost,

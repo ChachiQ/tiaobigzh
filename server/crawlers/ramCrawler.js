@@ -1,18 +1,15 @@
-import path from 'path';
 import fs from 'fs';
 import symbol from '../utils/eos/symbol';
 import RamExchanger from '../utils/eos/ramExchanger';
 import {asSetOfRamBytes,asSetOfEOS} from '../utils/eos/asset';
+var appRoot = require('app-root-path');
 
 
 var RamCrawler = (opts, renew) => {
     let crawler = Object.assign({}, {
         eos: null,
         esClient: null, //elastic search instance
-        ctxFileName: path.format({ //the context path of last run
-            dir: __dirname,
-            base: '.ram_crawler_ctx'
-        }),
+        ctxFileName: appRoot + '/.ram_crawler_ctx',
         ctx: null,
 
         async start() {

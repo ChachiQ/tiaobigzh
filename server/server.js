@@ -7,6 +7,8 @@ var app = require('../app');
 var debug = require('debug')('app:server');
 var http = require('http');
 
+var isDev = process.env.NODE_ENV !== 'production';
+
 /**
  * Get port from environment and store in Express.
  */
@@ -19,6 +21,11 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+if (isDev) {
+  var reload = require('reload');
+  reload(app);
+}
+
 
 /**
  * Listen on provided port, on all network interfaces.

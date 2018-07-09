@@ -1,5 +1,6 @@
 const express = require('express');
-const config = require('../config');
+var appRoot = require('app-root-path');
+const config = require(appRoot + '/config');
 const router = express.Router();
 const debug = require('debug')('app:eos');
 

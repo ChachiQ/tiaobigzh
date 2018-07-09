@@ -1,36 +1,35 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
-
-var nodeExternals = require('webpack-node-externals');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-    target: "node",
     entry: {
-        server: './bin/server.js',
+        index: './client/index.js',
     },
-    externals: [nodeExternals()],
     plugins: [
         new CleanWebpackPlugin(['dist']),
-        new webpack.BannerPlugin({
-            banner: "#!/usr/bin/env node",
-            raw: true
-        })
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: './server/views/index/index.html',
+            title: 'RAM EX',
+            inject: true,
+        }),
     ],
     output: {
-        filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        filename: '[name].[hash].bundle.js',
+        path: path.resolve(__dirname, 'dist'),
     },
     module: {
         rules: [
             {
-                test: /\.js$ /,
-                loader: ['babel-loader'],
+                test: /.jsx?$/,
+                include: path.join(__dirname, 'client'),
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                options: {
+                    presets: ['es2015', 'react', 'stage-3']
+                }
             },
         ]
-    },
-    resolve: {
-        modules: ["node_modules"]
     }
 }
