@@ -10,7 +10,7 @@ var isDev = process.env.NODE_ENV !== 'production';
 
 app.engine('html', consolidate.ejs);
 app.set('view engine', 'html');
-app.set('views', path.resolve(__dirname, './client/template'));
+app.set('views', path.resolve(__dirname, './server/views'));
 
 app.locals.env = process.env.NODE_ENV || 'development';
 
