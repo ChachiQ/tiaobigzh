@@ -2,7 +2,7 @@ import symbol from './symbol';
 import { AsSet, asSetOfRamBytes, asSetOfEOS } from './asset'
 import assert from 'assert';
 
-const DEFAULT_TRANS_CACHE_COUNT = 500;
+const DEFAULT_TRANS_CACHE_COUNT = 100;
 const RAM_TRADE_ACTIONS = [symbol.BUY_RAM_ACTION, symbol.BUY_RAM_BYTES_ACTION, symbol.SELL_RAM_ACTION];
 
 function mergeCrawlerFuncs(eos) {
@@ -67,7 +67,10 @@ function mergeCrawlerFuncs(eos) {
                                 return a === act.name
                             }) >= 0 &&
                             trace.inline_traces.findIndex((t) => {
-                                return t.receipt.act_digest === trsfrAction.action_trace.receipt.act_digest
+                                return trsfrAction.global_action_seq === t.receipt.global_sequence ||
+                                    (t.inline_traces && t.inline_traces.findIndex((tt) => {
+                                        return trsfrAction.global_action_seq === tt.receipt.global_sequence
+                                    }) >= 0)
                             }) >= 0
                     })
                     if (!tradeAction) {
@@ -161,6 +164,7 @@ function TransCache(size) {
             let id = this.idList.shift();
             if (id) {
                 this.cache.delete(id)
+            //console.log(`shift, cache ${this.cache.size}, idList ${this.idList.length}`);
             }
             return this.idList.length;
         },
